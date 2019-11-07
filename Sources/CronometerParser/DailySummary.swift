@@ -17,10 +17,17 @@ func printDailySummary(records: [Date:Summary]) {
     }
 }
 
+func date(_ timestamp: Date?) -> String {
+    guard let timestamp = timestamp as Date? else { return "" }
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    return formatter.string(from: timestamp)
+}
+
 func printCalorieComparison(records: [Date:Summary]) {
-    for key in records.keys {
-        print(key)
-        print("--------------------------------------------------")
+    print("--------------------------------------------------")
+    for key in records.keys.sorted() {
+        print(date(key), terminator: "\t")
         var consumed: Float = 0
         if let intake = records[key]?.intake {
             consumed = intake.energy
