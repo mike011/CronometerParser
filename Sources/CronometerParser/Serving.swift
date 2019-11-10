@@ -1,94 +1,98 @@
 //
-//  DailySummary.swift
+//  Serving.swift
 //  CSV
 //
-//  Created by Michael Charland on 2019-09-29.
+//  Created by Michael Charland on 2019-11-10.
 //
 
 import CSV
 import Foundation
 
-struct DailyIntake: Decodable {
-    let date: Date
+struct Serving: Decodable {
+    let day: Date
+    let food: String
+    let amount: String
     let energy: Float
-    let water: Float
-    let b1: Float
-    let b2: Float
-    let b3: Float
-    let b5: Float
-    let b6: Float
-    let b12: Float
-    let alphaCarotene: Float
-    let beta: Float
-    let betaCarotene: Float
-    let betaCryptoxanthin: Float
-    let choline: Float
-    let delta: Float
-    let folate: Float
-    let luteinZeaxanthin: Float
-    let lycopene: Float
-    let retinol: Float
-    let retinolActivityEquivalent: Float
-    let vitaminA: Float
-    let vitaminC: Float
-    let vitaminD: Float
-    let vitaminE: Float
-    let vitaminK: Float
-    let calcium: Float
-    let copper: Float
-    let iron: Float
-    let magnesium: Float
-    let manganese: Float
+    let water: Float?
+    let b1: Float?
+    let b2: Float?
+    let b3: Float?
+    let b5: Float?
+    let b6: Float?
+    let b12: Float?
+    let alphaCarotene: Float?
+    let beta: Float?
+    let betaCarotene: Float?
+    let betaCryptoxanthin: Float?
+    let choline: Float?
+    let delta: Float?
+    let folate: Float?
+    let luteinZeaxanthin: Float?
+    let lycopene: Float?
+    let retinol: Float?
+    let retinolActivityEquivalent: Float?
+    let vitaminA: Float?
+    let vitaminC: Float?
+    let vitaminD: Float?
+    let vitaminE: Float?
+    let vitaminK: Float?
+    let calcium: Float?
+    let copper: Float?
+    let iron: Float?
+    let magnesium: Float?
+    let manganese: Float?
     let molybdenum: Float?
-    let phosphorus: Float
-    let potassium: Float
-    let selenium: Float
-    let sodium: Float
-    let zinc: Float
-    let carbs: Float
-    let fiber: Float
-    let fructose: Float
-    let galactose: Float
-    let glucose: Float
-    let lactose: Float
-    let maltose: Float
-    let starch: Float
-    let sucrose: Float
-    let sugars: Float
-    let netCarbs: Float
-    let fat: Float
-    let cholesterol: Float
-    let monounsaturated: Float
-    let omega3: Float
-    let omega6: Float
+    let phosphorus: Float?
+    let potassium: Float?
+    let selenium: Float?
+    let sodium: Float?
+    let zinc: Float?
+    let carbs: Float?
+    let fiber: Float?
+    let fructose: Float?
+    let galactose: Float?
+    let glucose: Float?
+    let lactose: Float?
+    let maltose: Float?
+    let starch: Float?
+    let sucrose: Float?
+    let sugars: Float?
+    let netCarbs: Float?
+    let fat: Float?
+    let cholesterol: Float?
+    let monounsaturated: Float?
+    let omega3: Float?
+    let omega6: Float?
     let phytosterol: Float?
-    let polyunsaturated: Float
-    let saturated: Float
-    let transFats: Float
-    let alanine: Float
-    let arginine: Float
-    let aspartic: Float
-    let cystine: Float
-    let glutamic: Float
-    let glycine: Float
-    let histidine: Float
+    let polyunsaturated: Float?
+    let saturated: Float?
+    let transFats: Float?
+    let alanine: Float?
+    let arginine: Float?
+    let aspartic: Float?
+    let cystine: Float?
+    let glutamic: Float?
+    let glycine: Float?
+    let histidine: Float?
     let hydroxyproline: Float?
-    let isoleucine: Float
-    let leucine: Float
-    let lysine: Float
-    let methionine: Float
-    let phenylalanine: Float
-    let proline: Float
-    let protein: Float
-    let serine: Float
-    let threonine: Float
-    let tryptophan: Float
-    let tyrosine: Float
-    let valine: Float
-    let completed: Bool
-
+    let isoleucine: Float?
+    let leucine: Float?
+    let lysine: Float?
+    let methionine: Float?
+    let phenylalanine: Float?
+    let proline: Float?
+    let protein: Float?
+    let serine: Float?
+    let threonine: Float?
+    let tryptophan: Float?
+    let tyrosine: Float?
+    let valine: Float?
+    let category: String
+    
     enum CodingKeys : String, CodingKey {
-        case date = "Date"
+        case day = "Day"
+        case food = "Food Name"
+        case amount = "Amount"
         case energy = "Energy (kcal)"
         case water = "Water (g)"
         case b1 = "B1 (Thiamine) (mg)"
@@ -164,42 +168,22 @@ struct DailyIntake: Decodable {
         case tryptophan = "Tryptophan (g)"
         case tyrosine = "Tyrosine (g)"
         case valine = "Valine (g)"
-        case completed = "Completed"
+        case category = "Category"
     }
 }
 
-struct Summary {
-    let intake: DailyIntake?
-    var exercises = [Exercise]()
-
-    init(intake: DailyIntake?) {
-        self.intake = intake
-    }
-}
-
-func parseDailyIntake(fileName: String) -> [Date:Summary] {
-    var records = [Date:Summary]()
-    do {
+func parseServing(fileName: String) {
+    //do {
         let stream = InputStream(fileAtPath: fileName)!
         let reader = try! CSVReader(stream: stream, hasHeaderRow: true)
-
+        
         let decoder = CSVRowDecoder()
         decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
         while reader.next() != nil {
-            let row = try decoder.decode(DailyIntake.self, from: reader)
-            records[row.date] = Summary(intake: row)
+            let row = try! decoder.decode(Serving.self, from: reader)
+            print(row)
         }
-    } catch {
+    //} catch {
         // Invalid row format
-    }
-
-    return records
-}
-
-extension DateFormatter {
-    static let iso8601Full: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
+    //}
 }
