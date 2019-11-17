@@ -31,10 +31,10 @@ func printDateInfo(_ timestamp: Date?) {
     print(formatter.string(from: timestamp), terminator: "\t") // full date
     formatter.setLocalizedDateFormatFromTemplate("MM")
     print(formatter.string(from: timestamp), terminator: "\t") // month
-    formatter.setLocalizedDateFormatFromTemplate("ww")
+    formatter.setLocalizedDateFormatFromTemplate("ee")
     print(formatter.string(from: timestamp), terminator: "\t") // week
-    formatter.setLocalizedDateFormatFromTemplate("dd")
-    print(formatter.string(from: timestamp), terminator: "\t") // day of month
+   // formatter.setLocalizedDateFormatFromTemplate("dd")
+   // print(formatter.string(from: timestamp), terminator: "\t") // day of month
 }
 
 func printCalorieComparisonSimple(records: [Date:Summary]) {
@@ -55,14 +55,14 @@ func printCalorieComparisonSimple(records: [Date:Summary]) {
         }
         print(String(format: "%0.1f", arguments: [burned]), separator: "", terminator: "\t")
 
-        let diff = consumed / abs(burned) - 1
+        let diff = burned / consumed
         print(String(format: "%0.1f", arguments: [diff]), separator: "", terminator: "\n")
         print("--------------------------------------------------")
     }
 }
 
 func printCalorieComparison(records: [Date:Summary]) {
-    print("Date\tM\tW\tD\tBurned\tCons\tdiff\tPro %\tCarb %\tFats %\t%Raw")
+    print("Date\tM\tW\tBurned\tCons\tdiff\tPro %\tCarb %\tFats %\t%Raw")
     for key in records.keys.sorted() {
         printDateInfo(key)
         guard let intake = records[key]?.intake else {
@@ -80,7 +80,7 @@ func printCalorieComparison(records: [Date:Summary]) {
         let consumed = intake.energy
         print(String(format: "%0.1f", arguments: [consumed]), separator: "", terminator: "\t")
 
-        let diff = (consumed / abs(burned) - 1) * 100
+        let diff = ((consumed - (abs(burned))) / (abs(burned))) * 100.0
         let percent = String(format: "%0.1f", arguments: [diff])
         print("\(percent)%", separator: "", terminator: "\t")
 
