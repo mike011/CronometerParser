@@ -26,15 +26,27 @@ func date(_ timestamp: Date?) -> String {
 
 func printDateInfo(_ timestamp: Date?) {
     guard let timestamp = timestamp as Date? else { return }
+    printFullDate(timestamp)
+    printMonth(timestamp)
+    printDayOfWeek(timestamp)
+}
+
+fileprivate func printFullDate(_ timestamp: Date) {
     let formatter = DateFormatter()
     formatter.setLocalizedDateFormatFromTemplate("MMMdd")
-    print(formatter.string(from: timestamp), terminator: "\t") // full date
+    print(formatter.string(from: timestamp), terminator: "\t")
+}
+
+fileprivate func printMonth(_ timestamp: Date) {
+    let formatter = DateFormatter()
     formatter.setLocalizedDateFormatFromTemplate("MM")
-    print(formatter.string(from: timestamp), terminator: "\t") // month
-    formatter.setLocalizedDateFormatFromTemplate("ee")
-    print(formatter.string(from: timestamp), terminator: "\t") // week
-   // formatter.setLocalizedDateFormatFromTemplate("dd")
-   // print(formatter.string(from: timestamp), terminator: "\t") // day of month
+    print(formatter.string(from: timestamp), terminator: "\t")
+}
+
+fileprivate func printDayOfWeek(_ timestamp: Date) {
+    let formatter = DateFormatter()
+    formatter.setLocalizedDateFormatFromTemplate("EEEE")
+    print(formatter.string(from: timestamp), terminator: "\t")
 }
 
 func printCalorieComparisonSimple(records: [Date:Summary]) {
@@ -43,7 +55,7 @@ func printCalorieComparisonSimple(records: [Date:Summary]) {
         print(date(key), terminator: "\t")
         var consumed: Float = 0
         if let intake = records[key]?.intake {
-            consumed = intake.energy
+            consumed = intake.energy ?? 0
             print(String(format: "%0.1f", arguments: [consumed]), separator: "", terminator: "\t")
         }
 
@@ -77,27 +89,30 @@ func printCalorieComparison(records: [Date:Summary]) {
         }
         print(String(format: "%0.1f", arguments: [abs(burned)]), separator: "", terminator: "\t")
 
-        let consumed = intake.energy
+        let consumed = intake.energy ?? 0
         print(String(format: "%0.1f", arguments: [consumed]), separator: "", terminator: "\t")
 
         let diff = ((consumed - (abs(burned))) / (abs(burned))) * 100.0
         let percent = String(format: "%0.1f", arguments: [diff])
         print("\(percent)%", separator: "", terminator: "\t")
 
-        let protein = intake.protein * 4
-        let carbs = intake.netCarbs * 4
-        let fat = intake.fat * 9
+        let protein = intake.protein ?? 0 * 4
+        let carbs = intake.netCarbs ?? 0 * 4
+        let fat = intake.fat ?? 0 * 9
         let total = protein + carbs + fat
 
-        let proteinp = (protein / total) * 100
-        print(String(format: "%0.1f", arguments: [proteinp])+"%", separator: "", terminator: "\t")
-
-        let carbsp = (carbs / total) * 100
-        print(String(format: "%0.1f", arguments: [carbsp])+"%", separator: "", terminator: "\t")
-
-        let fatp = (fat / total) * 100
-        print(String(format: "%0.1f", arguments: [fatp])+"%", separator: "", terminator: "\t")
-
+        printPercentage(for: protein, total)
+        printPercentage(for: carbs, total)
+        printPercentage(for: fat, total)
         print()
     }
+}
+
+fileprivate func printPercentage(for top: Float, _ total: Float) {
+    var percentage: Float = 0.0
+    if total > 0 {
+        percentage = (top / total) * 100
+    }
+
+    print(String(format: "%0.1f", arguments: [percentage])+"%", separator: "", terminator: "\t")
 }

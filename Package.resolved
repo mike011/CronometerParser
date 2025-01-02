@@ -1,16 +1,15 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "CSV.swift",
-        "repositoryURL": "https://github.com/yaslab/CSV.swift.git",
-        "state": {
-          "branch": null,
-          "revision": "67c5209ae699d5d3ded866de5ee6a6b4005a1b56",
-          "version": "2.4.2"
-        }
+  "originHash" : "c06084e768a6b7f938f010073a18daceb725a592d37bcde2faa9c768c0bcde72",
+  "pins" : [
+    {
+      "identity" : "csv.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yaslab/CSV.swift.git",
+      "state" : {
+        "revision" : "b4371dc833ba22ab6ead90fb63d267c3cf9ce773",
+        "version" : "2.5.2"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 3
 }

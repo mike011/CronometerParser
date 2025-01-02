@@ -14,7 +14,7 @@ struct Exercise: Decodable {
     let minutes: Float
     let calories: Float
 
-    enum CodingKeys : String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case date = "Day"
         case exercise = "Exercise"
         case minutes = "Minutes"

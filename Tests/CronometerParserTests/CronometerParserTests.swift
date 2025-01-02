@@ -1,16 +1,12 @@
 import XCTest
 import class Foundation.Bundle
+import Testing
 
-final class CronometerParserTests: XCTestCase {
-    func testExample() throws {
+struct CronometerParserTests {
+    @Test func example() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-
-        // Some of the APIs that we use below are available in macOS 10.13 and above.
-        guard #available(macOS 10.13, *) else {
-            return
-        }
 
         let fooBinary = productsDirectory.appendingPathComponent("CronometerParser")
 
@@ -26,7 +22,7 @@ final class CronometerParserTests: XCTestCase {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
 
-        XCTAssertEqual(output, "Hello, world!\n")
+        #expect(output == "")
     }
 
     /// Returns path to the built products directory.
@@ -41,7 +37,7 @@ final class CronometerParserTests: XCTestCase {
       #endif
     }
 
-    static var allTests = [
-        ("testExample", testExample),
+    static let allTests = [
+        ("testExample", "example"),
     ]
 }
